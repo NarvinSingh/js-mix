@@ -1,0 +1,33 @@
+{
+  "name": "narvin-mix",
+  "version": "1.0.0",
+  "description": "Creates a class composed of mixin classes.",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NarvinSingh/js-mix.git"
+  },
+  "keywords": [
+    "mix",
+    "mixin",
+    "compose",
+    "composition"
+  ],
+  "author": "Narvin Singh <Narvin.A.Singh@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NarvinSingh/js-mix/issues"
+  },
+  "homepage": "https://github.com/NarvinSingh/js-mix#readme",
+  "devDependencies": {
+    "@babel/preset-env": "^7.9.6",
+    "@types/jest": "^25.2.3",
+    "eslint": "^7.0.0",
+    "eslint-config-airbnb-base": "^14.1.0",
+    "eslint-plugin-import": "^2.20.2",
+    "jest": "^26.0.1"
+  }
+}
