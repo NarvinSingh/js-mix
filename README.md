@@ -1,3 +1,80 @@
-# mix
+# Mix
+Create a class composed of mixin classes and an optional base class or object.
 
-Creates a class composed of mixin classes.
+## Installation
+```
+$ npm install @narvin/mix
+```
+
+## Usage
+Write classes that you want to use for composition as **mixin class factories**. The factory should take a `Superclass` parameter and return a class that extends that superclass.
+```JavaScript
+// This is a class factory
+function createSpeaker(Superclass = Object) {
+  return class Speaker extends Superclass {
+    constructor(sound, ...superArgs) {
+        super(...superArgs);
+        this.sound = sound;
+    }
+    
+    speak() {
+        console.log(`I say ${this.sound}.`);
+    }
+  }
+}
+
+// This is another class factory
+function createEater(Superclass = Object) {
+  return class Eater extends Superclass {
+    constructor(energy, ...superArgs) {
+        super(...superArgs);
+        this.energy = energy;
+    }
+
+    eat(amount) {
+        this.energy += amount;
+    }
+  }
+}
+```
+Now you can create a new class composed of mixin classes.
+```JavaScript
+const Eater = createEater();
+const Cat = createSpeaker(Eater);
+// Prototype chain: Speaker -> Eater -> Object
+const mimi = new Cat('brawwr', 10);
+mimi.speak(); // 'I say brawwr.'
+mimi.eat(5);
+console.log(mimi.energy); // 15
+```
+`mix` allows you to streamline the creation of these classes.
+```JavaScript
+import { mix } from '@narvin/mix'
+const Cat = mix(createSpeaker, createEater);
+// Prototype chain: Speaker -> Eater -> Object
+const mimi = new Cat('brawwr', 10);
+```
+`mixClass` allows you to extend a single non-mixin class then mix it with mixin classes. The non-mixin class will come after the mixin classes in the prototype chain.
+```JavaScript
+import { mixClass } from '@narvin/mix'
+class Jumper {
+    jump() {
+        console.log('Uh, no.');
+    }
+}
+const Cat = mixClass(Jumper, createSpeaker, createEater);
+// Prototype chain: Speaker -> Eater -> Jumper -> Object
+const mimi = new Cat('brawwr', 10);
+mimi.jump(); // 'Uh, no.'
+```
+`mixObject` allows you to inherit from an object then mix it with mixin classes. The object will come after the mixin classes in the prototype chain.
+```JavaScript
+import { mixClass } from '@narvin/mix'
+const stash {
+    toys: ['string', 'ball', 'sock']
+}
+const Cat = mixClass(stash, createSpeaker, createEater);
+// Prototype chain: Speaker -> Eater -> Jumper -> Object
+const mimi = new Cat('brawwr', 10);
+console.log(mimi.toys[0]); // 'string'
+```
