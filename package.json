@@ -1,9 +1,13 @@
 {
-  "name": "narvin-mix",
+  "name": "ns-mix",
   "version": "1.0.1",
   "description": "Creates a class composed of mixin classes.",
   "type": "module",
   "main": "index.js",
+  "files": [
+    "index.js",
+    "modules/mix.mjs"
+  ],
   "scripts": {
     "test": "jest"
   },
