@@ -40,8 +40,10 @@ function createEater(Superclass = Object) {
 Now you can create a new class composed of mixin classes.
 ```JavaScript
 const Eater = createEater();
-const Cat = createSpeaker(Eater);
+
 // Prototype chain: Speaker -> Eater -> Object
+const Cat = createSpeaker(Eater);
+
 const mimi = new Cat('brawwr', 10);
 mimi.speak(); // 'I say brawwr.'
 mimi.eat(5);
@@ -50,8 +52,10 @@ console.log(mimi.energy); // 15
 `mix` allows you to streamline the creation of these classes.
 ```JavaScript
 import { mix } from '@narvin/mix'
-const Cat = mix(createSpeaker, createEater);
+
 // Prototype chain: Speaker -> Eater -> Object
+const Cat = mix(createSpeaker, createEater);
+
 const mimi = new Cat('brawwr', 10);
 ```
 `mixClass` allows you to extend a single non-mixin class then mix it with mixin classes. The non-mixin class will come after the mixin classes in the prototype chain.
@@ -62,19 +66,24 @@ class Jumper {
         console.log('Uh, no.');
     }
 }
-const Cat = mixClass(Jumper, createSpeaker, createEater);
+
 // Prototype chain: Speaker -> Eater -> Jumper -> Object
+const Cat = mixClass(Jumper, createSpeaker, createEater);
+
 const mimi = new Cat('brawwr', 10);
 mimi.jump(); // 'Uh, no.'
 ```
 `mixObject` allows you to inherit from an object then mix it with mixin classes. The object will come after the mixin classes in the prototype chain.
 ```JavaScript
-import { mixClass } from '@narvin/mix'
+import { mixObject } from '@narvin/mix'
+
 const stash {
     toys: ['string', 'ball', 'sock']
 }
-const Cat = mixClass(stash, createSpeaker, createEater);
-// Prototype chain: Speaker -> Eater -> Jumper -> Object
+
+// Prototype chain: Speaker -> Eater -> stash -> Object
+const Cat = mixObject(stash, createSpeaker, createEater);
+
 const mimi = new Cat('brawwr', 10);
 console.log(mimi.toys[0]); // 'string'
 ```
