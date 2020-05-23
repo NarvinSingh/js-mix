@@ -13,7 +13,8 @@ $ npm install @narvin/mix
 
 ## Usage
 Write classes that you want to use for composition as *mixin class factories*. The factory should
-take a `Superclass` parameter and return a class that extends that superclass.
+take a `Superclass` parameter and return a class that extends that superclass. If the class has an
+explicit constructor, it should pass along the arguments for the superclass.
 
 ```JavaScript
 // This is a class factory
