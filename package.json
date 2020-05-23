@@ -1,6 +1,6 @@
 {
-  "name": "ns-mix",
-  "version": "1.0.2",
+  "name": "@navin/mix",
+  "version": "1.0.0",
   "description": "Creates a class composed of mixin classes.",
   "type": "module",
   "main": "index.js",
@@ -34,5 +34,5 @@
     "eslint-config-airbnb-base": "^14.1.0",
     "eslint-plugin-import": "^2.20.2",
     "jest": "^26.0.1"
-  }
+  },
 }

@@ -59,37 +59,37 @@ const poopAmount = 0.1;
 describe.each([
   [
     'Pooper -> Eater -> Speaker',
-    mix(createSpeaker, createEater, createPooper),
+    mix(createPooper, createEater, createSpeaker),
     [energy, energyEfficiency, sound],
   ],
   [
     'Pooper -> Speaker -> Eater',
-    mix(createEater, createSpeaker, createPooper),
+    mix(createPooper, createSpeaker, createEater),
     [sound, energy, energyEfficiency],
   ],
   [
     'Speaker -> Pooper -> Eater',
-    mix(createEater, createPooper, createSpeaker),
+    mix(createSpeaker, createPooper, createEater),
     [sound, energy, energyEfficiency],
   ],
   [
     'Eater -> Speaker -> Pooper',
-    mix(createPooper, createSpeaker, createEater),
+    mix(createEater, createSpeaker, createPooper),
     [energy, energyEfficiency, sound],
   ],
   [
     'Speaker -> Eater -> Pooper',
-    mix(createPooper, createEater, createSpeaker),
+    mix(createSpeaker, createEater, createPooper),
     [sound, energy, energyEfficiency],
   ],
   [
     'Pooper -> Eater -> Speaker',
-    mixObject({}, createSpeaker, createEater, createPooper),
+    mixObject(createPooper, createEater, createSpeaker, {}),
     [energy, energyEfficiency, sound],
   ],
   [
     'Pooper -> Eater -> Speaker',
-    mixClass(createSpeaker(), createEater, createPooper),
+    mixClass(createPooper, createEater, createSpeaker()),
     [energy, energyEfficiency, sound],
   ],
 ])('mix %s tests', (name, Cat, args) => {
@@ -157,7 +157,7 @@ describe.each([
 
 describe('mix StaticClass1 -> StaticClass2 tests', () => {
   test('Prototype chain is correct', () => {
-    const StaticClass12 = mix(createStaticClass1, createStaticClass2);
+    const StaticClass12 = mix(createStaticClass2, createStaticClass1);
     const prototypes = [...Array(2)]
       .map((item, index) => [...Array(index + 1)]
         .reduce((acc) => Object.getPrototypeOf(acc), StaticClass12).name)
@@ -170,7 +170,7 @@ describe('mix StaticClass1 -> StaticClass2 tests', () => {
     ['getStaticThing1'],
     ['getStaticThing2'],
   ])('Has the static method %s', (method) => {
-    const StaticClass12 = mix(createStaticClass1, createStaticClass2);
+    const StaticClass12 = mix(createStaticClass2, createStaticClass1);
 
     expect(StaticClass12[method]).toBeInstanceOf(Function);
   });
@@ -179,8 +179,8 @@ describe('mix StaticClass1 -> StaticClass2 tests', () => {
     ['getStaticThing1'],
     ['getStaticThing2'],
   ])('Has the not shared static method %s', (method) => {
-    const StaticClass12a = mix(createStaticClass1, createStaticClass2);
-    const StaticClass12b = mix(createStaticClass1, createStaticClass2);
+    const StaticClass12a = mix(createStaticClass2, createStaticClass1);
+    const StaticClass12b = mix(createStaticClass2, createStaticClass1);
 
     expect(StaticClass12a[method]).toBeInstanceOf(Function);
     expect(StaticClass12b[method]).toBeInstanceOf(Function);
@@ -191,7 +191,7 @@ describe('mix StaticClass1 -> StaticClass2 tests', () => {
     ['getStaticThing1', 'StaticClass1 thing'],
     ['getStaticThing2', 'StaticClass2 thing'],
   ])('Static method %s gets correct value', (method, expectedValue) => {
-    const StaticClass12 = mix(createStaticClass1, createStaticClass2);
+    const StaticClass12 = mix(createStaticClass2, createStaticClass1);
 
     expect(StaticClass12[method]()).toBe(expectedValue);
   });
@@ -200,15 +200,15 @@ describe('mix StaticClass1 -> StaticClass2 tests', () => {
 describe.each([
   [
     'Speaker -> StaticClass2 -> StaticClass1',
-    mix(createStaticClass1, createStaticClass2, createSpeaker),
+    mix(createSpeaker, createStaticClass2, createStaticClass1),
   ],
   [
     'StaticClass2 -> Speaker -> StaticClass1',
-    mix(createStaticClass1, createSpeaker, createStaticClass2),
+    mix(createStaticClass2, createSpeaker, createStaticClass1),
   ],
   [
     'StaticClass2 -> StaticClass1 -> Speaker',
-    mix(createSpeaker, createStaticClass1, createStaticClass2),
+    mix(createStaticClass2, createStaticClass1, createSpeaker),
   ],
 ])('mix %s tests', (name, Mixin) => {
   test('Prototype chain is correct', () => {
