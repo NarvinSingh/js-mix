@@ -1,6 +1,10 @@
 # Mix
-Create a class composed of mixin classes and an optional base class or object. By using this
-pattern, you gain the benefits of composition while also retaining the efficiency of inheritance.
+Create a class by composing mixin classes to form a prototype chain. You may also inherit from a
+single regular class or object that will go at the base of your prototype chain.
+
+By using this pattern, you gain some of the benefits of composition while also retaining the
+efficiency of inheritance. Methods are shared by all instances of the class and `super` works, just
+like in normal inheritance.
 
 ## Installation
 ```
@@ -23,6 +27,11 @@ function createSpeaker(Superclass = Object) {
     speak() {
       console.log(`I say ${this.sound}.`);
     }
+
+    eat(amount) {
+      super.eat(amount);
+      console.log('That was yummy!');
+    }
   };
 }
 
@@ -44,14 +53,12 @@ function createEater(Superclass = Object) {
 Now you can create a new class composed of mixin classes.
 
 ```JavaScript
-const Eater = createEater();
-
 // Prototype chain: Speaker -> Eater -> Object
-const Cat = createSpeaker(Eater);
+const Cat = createSpeaker(createEater());
 
 const mimi = new Cat('brawwr', 10);
 mimi.speak(); // 'I say brawwr.'
-mimi.eat(5);
+mimi.eat(5); // 'That was yummy!'
 console.log(mimi.energy); // 15
 ```
 
@@ -66,7 +73,7 @@ const Cat = mix(createSpeaker, createEater);
 
 const mimi = new Cat('brawwr', 10);
 mimi.speak(); // 'I say brawwr.'
-mimi.eat(5);
+mimi.eat(5); // 'That was yummy!'
 console.log(mimi.energy); // 15
 ```
 
@@ -88,7 +95,7 @@ class Jumper {
 }
 
 // Prototype chain: Speaker -> Eater -> Jumper -> Object
-const Cat = mixClass(Jumper, createSpeaker, createEater);
+const Cat = mixClass(createSpeaker, createEater, Jumper);
 
 const mimi = new Cat('brawwr', 10, 8);
 mimi.jump(); // 'Uh, no. 8 is too high.'
@@ -101,11 +108,11 @@ in the prototype chain.
 ```JavaScript
 import { mixObject } from '@narvin/mix'
 
-const stash = { toys: ['string', 'ball', 'sock'] };
+const state = { favoriteToy: 'mouse' };
 
-// Prototype chain: Speaker -> Eater -> stash -> Object
-const Cat = mixObject(stash, createSpeaker, createEater);
+// Prototype chain: Speaker -> Eater -> state -> Object
+const Cat = mixObject(createSpeaker, createEater, state);
 
 const mimi = new Cat('brawwr', 10);
-console.log(mimi.toys[0]); // 'string'
+console.log(mimi.favoriteToy); // 'mouse'
 ```
