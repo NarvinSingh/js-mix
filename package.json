@@ -2,10 +2,9 @@
   "name": "@navin/mix",
   "version": "1.0.0",
   "description": "Creates a class composed of mixin classes.",
-  "type": "module",
-  "main": "index.js",
+  "main": "index.mjs",
   "files": [
-    "index.js",
+    "index.mjs",
     "modules/mix.mjs"
   ],
   "scripts": {
