@@ -1,5 +1,5 @@
 {
-  "name": "@navin/mix",
+  "name": "@narvin/mix",
   "version": "1.0.0",
   "description": "Creates a class composed of mixin classes.",
   "main": "index.mjs",
@@ -33,5 +33,6 @@
     "eslint-config-airbnb-base": "^14.1.0",
     "eslint-plugin-import": "^2.20.2",
     "jest": "^26.0.1"
-  }
+  },
+  "dependencies": {}
 }
