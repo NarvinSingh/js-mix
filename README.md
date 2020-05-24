@@ -1,4 +1,5 @@
 # Mix
+
 Create a class by composing mixin classes to form a prototype chain. You may also inherit from a
 single regular class or object that will go at the base of your prototype chain.
 
@@ -7,11 +8,13 @@ efficiency of inheritance. Methods are shared by all instances of the class and 
 like in normal inheritance.
 
 ## Installation
+
 ```
-> npm install @narvin/mix
+> npm i @narvin/mix
 ```
 
 ## Usage
+
 Write classes that you want to use for composition as *mixin class factories*. The factory should
 take a `Superclass` parameter and return a class that extends that superclass. If the class has an
 explicit constructor, it should pass along the arguments for the superclass.
@@ -64,6 +67,7 @@ console.log(mimi.energy); // 15
 ```
 
 ### mix(...classFactories)
+
 Streamline the composition of these classes.
 
 ```JavaScript
@@ -79,6 +83,7 @@ console.log(mimi.energy); // 15
 ```
 
 ### mixClass(...classFactories, Baseclass)
+
 Extend a single regular class then mix it with mixin classes. The regular class will come after the
 mixin classes in the prototype chain.
 
@@ -103,6 +108,7 @@ mimi.jump(); // 'Uh, no. 8 is too high.'
 ```
 
 ### mixObject(...classFactories, baseObject)
+
 Inherit from an object then mix it with mixin classes. The object will come after the mixin classes
 in the prototype chain.
 
@@ -119,6 +125,7 @@ console.log(mimi.favoriteToy); // 'mouse'
 ```
 
 ### mixSuperclass(Baseclass, ...requirements)
+
 Use in mixin class factories when mixin classes depend on certain methods being in the prototype
 chain. The function checks if `Baseclass` contains all of the methods that the mixin class requires,
 then returns `Baseclass` or a mixin class composed of `Baseclass` and the mixin classes that would

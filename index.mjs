@@ -1,1 +1,6 @@
-export { mixClass, mixObject, mix } from './modules/mix.mjs';
+export {
+  mixClass,
+  mixObject,
+  mix,
+  mixSuperclass,
+} from './modules/mix.mjs';
