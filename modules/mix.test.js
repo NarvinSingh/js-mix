@@ -1,6 +1,6 @@
 /* eslint-disable max-classes-per-file */
 
-import { mixClass, mixObject, mix } from './mix.mjs';
+import { mixClass, mixObject, mix, mixSuperclass } from './mix.mjs';
 
 const createSpeaker = (Superclass = Object) => class Speaker extends Superclass {
   constructor(sound, ...superArgs) {
@@ -38,6 +38,15 @@ const createPooper = (Superclass = Object) => class Pooper extends Superclass {
   }
 };
 
+function createDigester(Baseclass = Object) {
+  const Superclass = mixSuperclass(
+    Baseclass,
+    { factory: createEater, methods: ['eat'] },
+    { factory: createPooper, methods: ['poop'] },
+  );
+  return class Digester extends Superclass {};
+}
+
 const createStaticClass1 = (Superclass = Object) => class StaticClass1 extends Superclass {
   static getStaticThing1() {
     return 'StaticClass1 thing';
@@ -58,49 +67,66 @@ const poopAmount = 0.1;
 
 describe.each([
   [
-    'Pooper -> Eater -> Speaker',
+    'Pooper -> Eater -> Speaker -> Object',
     mix(createPooper, createEater, createSpeaker),
     [energy, energyEfficiency, sound],
   ],
   [
-    'Pooper -> Speaker -> Eater',
+    'Pooper -> Speaker -> Eater -> Object',
     mix(createPooper, createSpeaker, createEater),
     [sound, energy, energyEfficiency],
   ],
   [
-    'Speaker -> Pooper -> Eater',
+    'Speaker -> Pooper -> Eater -> Object',
     mix(createSpeaker, createPooper, createEater),
     [sound, energy, energyEfficiency],
   ],
   [
-    'Eater -> Speaker -> Pooper',
+    'Eater -> Speaker -> Pooper -> Object',
     mix(createEater, createSpeaker, createPooper),
     [energy, energyEfficiency, sound],
   ],
   [
-    'Speaker -> Eater -> Pooper',
+    'Speaker -> Eater -> Pooper -> Object',
     mix(createSpeaker, createEater, createPooper),
     [sound, energy, energyEfficiency],
   ],
   [
-    'Pooper -> Eater -> Speaker',
+    'Pooper -> Eater -> Speaker -> Object -> Object',
     mixObject(createPooper, createEater, createSpeaker, {}),
     [energy, energyEfficiency, sound],
   ],
   [
-    'Pooper -> Eater -> Speaker',
+    'Pooper -> Eater -> Speaker -> Object',
     mixClass(createPooper, createEater, createSpeaker()),
+    [energy, energyEfficiency, sound],
+  ],
+  [
+    'Digester -> Eater -> Pooper -> Speaker -> Object',
+    mix(createDigester, createSpeaker),
+    [energy, energyEfficiency, sound],
+  ],
+  [
+    'Digester -> Eater -> Pooper -> Speaker -> Object',
+    mix(createDigester, createPooper, createSpeaker),
+    [energy, energyEfficiency, sound],
+  ],
+  [
+    'Digester -> Pooper -> Eater -> Speaker -> Object',
+    mix(createDigester, createEater, createSpeaker),
     [energy, energyEfficiency, sound],
   ],
 ])('mix %s tests', (name, Cat, args) => {
   test('Prototype chain is correct', () => {
     const cat = new Cat(...args);
-    const prototypes = [...Array(4)]
-      .map((item, index) => [...Array(index + 1)]
-        .reduce((acc) => Object.getPrototypeOf(acc), cat).constructor.name)
-      .join(' -> ');
+    let prototype = Object.getPrototypeOf(cat);
+    const prototypes = [];
 
-    expect(prototypes).toBe(`${name} -> Object`);
+    while (prototype !== null) {
+      prototypes.push(prototype.constructor.name);
+      prototype = Object.getPrototypeOf(prototype);
+    }
+    expect(prototypes.join(' -> ')).toBe(name);
   });
 
   test.each([

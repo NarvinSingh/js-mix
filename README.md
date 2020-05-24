@@ -78,7 +78,7 @@ mimi.eat(5); // 'That was yummy!'
 console.log(mimi.energy); // 15
 ```
 
-### mixClass(...classFactories, BaseClass)
+### mixClass(...classFactories, Baseclass)
 Extend a single regular class then mix it with mixin classes. The regular class will come after the
 mixin classes in the prototype chain.
 
@@ -116,4 +116,71 @@ const Cat = mixObject(createSpeaker, createEater, state);
 
 const mimi = new Cat('brawwr', 10);
 console.log(mimi.favoriteToy); // 'mouse'
+```
+
+### mixSuperclass(Baseclass, ...requirements)
+Use in mixin class factories when mixin classes depend on certain methods being in the prototype
+chain. Checks if `Baseclass` contains all of the methods that the mixin class requires, then returns
+`Baseclass` or a mixin class composed of `Baseclass` and the mixin classes that would provide the
+missing methods.
+
+You could create a class `Eater` that requires a `digest` method that is present in a `Digester`
+class like this:
+
+```JavaScript
+function createDigester(Superclass = Object) {
+  return class Digester extends Superclass {
+    constructor(energy, ...superArgs) {
+      super(...superArgs);
+      this.energy = energy;
+    }
+
+    digest(amount) {
+      this.energy -= 0.1 * amount;
+    }
+  };
+}
+
+function createEater(Baseclass = Object) {
+  const Superclass = typeof Baseclass.prototype.digest === 'function'
+    ? Baseclass : createDigester(Baseclass);
+  return class Eater extends Superclass {
+    constructor(energy, ...superArgs) {
+      super(...superArgs);
+      this.energy = energy;
+    }
+
+    eat(amount) {
+      this.energy += amount;
+      this.digest(amount);
+    }
+  };
+}
+```
+
+But if `Eater` requires a `digest` method that is present in a `Digester` class, as well as `chew`
+and `swallow` methods that are present in a `Masticater` class you could use `mixSuperclass`  to
+streamline things in `createEater` like this:
+
+```JavaScript
+function createEater(Baseclass = Object) {
+  const Superclass = mixSuperclass(
+    Baseclass,
+    { factory: createDigester, methods: ['digest'] },
+    { factory: createMasticater, methods: ['chew', 'swallow'] },
+  );
+  return class Eater extends Superclass {
+    constructor(energy, ...superArgs) {
+      super(...superArgs);
+      this.energy = energy;
+    }
+
+    eat(amount) {
+      this.chew(amount);
+      this.swallow(amount);
+      this.digest(amount);
+      this.energy += amount;
+    }
+  };
+}
 ```

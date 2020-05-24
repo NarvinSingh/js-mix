@@ -16,4 +16,24 @@ function mix(...classFactories) {
   return mixClass(...classFactories, Object);
 }
 
-export { mixClass, mixObject, mix };
+function mixSuperclass(Class, ...requirements) {
+  return mixClass(
+    ...requirements
+      // Keep requirements where the Class prototype is missing some of that requirement's methods
+      .filter((requirement) => !requirement.methods.every(
+        (method) => typeof Class.prototype[method] === 'function',
+      ))
+      // Get the factories that will create classes with the missing methods
+      .map((requirement) => requirement.factory),
+    // Mix the factories with Class to get a new class that contains the missing methods
+    // If no methods were missing, factories will be an empty array and mixClass will return Class
+    Class,
+  );
+}
+
+export {
+  mixClass,
+  mixObject,
+  mix,
+  mixSuperclass,
+};
