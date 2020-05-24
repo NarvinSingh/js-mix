@@ -1,6 +1,6 @@
 {
   "name": "@narvin/mix",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Creates a class composed of mixin classes.",
   "main": "index.mjs",
   "files": [
