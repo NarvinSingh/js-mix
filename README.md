@@ -120,9 +120,9 @@ console.log(mimi.favoriteToy); // 'mouse'
 
 ### mixSuperclass(Baseclass, ...requirements)
 Use in mixin class factories when mixin classes depend on certain methods being in the prototype
-chain. Checks if `Baseclass` contains all of the methods that the mixin class requires, then returns
-`Baseclass` or a mixin class composed of `Baseclass` and the mixin classes that would provide the
-missing methods.
+chain. The function checks if `Baseclass` contains all of the methods that the mixin class requires,
+then returns `Baseclass` or a mixin class composed of `Baseclass` and the mixin classes that would
+provide the missing methods.
 
 You could create a class `Eater` that requires a `digest` method that is present in a `Digester`
 class like this:
