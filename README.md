@@ -8,7 +8,7 @@ like in normal inheritance.
 
 ## Installation
 ```
-$ npm install @narvin/mix
+> npm install @narvin/mix
 ```
 
 ## Usage
