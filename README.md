@@ -159,8 +159,10 @@ function createEater(Baseclass = Object) {
 ```
 
 But if `Eater` requires a `digest` method that is present in a `Digester` class, as well as `chew`
-and `swallow` methods that are present in a `Masticater` class you could use `mixSuperclass`  to
-streamline things in `createEater` like this:
+and `swallow` methods that are present in a `Masticater` class you could use `mixSuperclass` in
+`createEater`. If `Baseclass` contains `digest`, `chew` and `swallow` methods, then `Eater` will
+extend `Baseclass`. Otherwise `Eater` will extend a new `Superclass` that is composed of `Baseclass`
+and only the mixin classes that contain methods that `Baseclass` does not have.
 
 ```JavaScript
 function createEater(Baseclass = Object) {
